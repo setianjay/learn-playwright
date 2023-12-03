@@ -56,4 +56,35 @@ public class AssertionTest extends BaseTest {
         assertEquals(actualUsernamePlaceholder, expectedUsernameInputPlaceholder);
         assertEquals(actualPasswordPlaceholder, expectedPasswordInputPlaceholder);
     }
+
+    @Test
+    @DisplayName(value = "Verify Attribute Value and Content Value in Playwright")
+    void verifyAttributeValueTest(){
+        String url = "http://autopract.com/selenium/dropdown1/";
+        String expectedContent = "Cricket";
+        String expectedValue = "item2";
+
+        // navigate url
+        page.navigate(url);
+
+        // get locator select with class name is custom-select
+        Locator selectDropdown = page.locator("select.custom-select");
+        /*
+        * get cricket option with nth, nth start from 0 for the first position. Because
+        * cricket on the second position, nth position is 1.
+        * */
+        Locator cricketOption = selectDropdown.locator("option >> nth=1");
+
+        // get text content inside cricket option (result: Cricket)
+        String actualContent = cricketOption.textContent();
+        // get value attribute in cricket options (result: item2)
+        String actualValue = cricketOption.getAttribute("value");
+
+        /*
+        * assert the value we get in value attribute and content is the same as the
+        * value attribute and content we expect
+        * */
+        assertEquals(actualContent, expectedContent);
+        assertEquals(actualValue, expectedValue);
+    }
 }
