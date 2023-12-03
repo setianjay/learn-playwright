@@ -1,5 +1,6 @@
 package com.setianjay;
 
+import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Locator;
 import com.setianjay.base.BaseTest;
 import org.junit.jupiter.api.DisplayName;
@@ -86,5 +87,36 @@ public class AssertionTest extends BaseTest {
         * */
         assertEquals(actualContent, expectedContent);
         assertEquals(actualValue, expectedValue);
+    }
+
+    @Test
+    @DisplayName(value = "Verify Tooltip Content in Playwright")
+    void verifyTooltipContentTest(){
+        String url = "https://jqueryui.com/tooltip/";
+        String expectedTooltipContent = "We ask for your age only for statistical purposes.";
+
+        // navigate url we want to test
+        page.navigate(url);
+
+        // if the content is inside an iframe, we have to get the iframe first using FrameLocator like below
+        FrameLocator frameWrap = page.frameLocator("iframe.demo-frame");
+
+        // get ageInput inside an iframe by id
+        Locator ageInput = frameWrap.locator("#age");
+
+        // hover the ageInput
+        ageInput.hover();
+
+        /*
+         * get tooltip inside an iframe by class name. In this case, the class name will only appear when the age input
+         * is hover
+         * */
+        Locator tooltip = frameWrap.locator(".ui-tooltip-content");
+
+        // get tooltip content
+        String tooltipContent = tooltip.textContent();
+
+        // assert the tooltip content we get is the same as the expected tooltip content we expect
+        assertEquals(tooltipContent, expectedTooltipContent);
     }
 }
